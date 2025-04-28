@@ -9,28 +9,89 @@ document.body.innerHTML = `
     <span id="reponse"></span>
   </div>
   <div id="bouton">
-    <button>CE</button>
-    <button>C</button>
-    <button><img src="./img/backspace.svg" alt="bouton effacer" width="16px" /></button>
-    <button>÷</button>
-    <button>7</button>
-    <button>8</button>
-    <button>9</button>
-    <button>×</button>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
-    <button>-</button>
-    <button>1</button>
-    <button>2</button>
-    <button>3</button>
-    <button>+</button>
-    <button>±</button>
-    <button>0</button>
-    <button>.</button>
-    <button>=</button>
+    <button class="supprimer">CE</button>
+    <button class="supprimer">C</button>
+    <button class="supprimer"><i class="fa-solid fa-delete-left"></i></button>
+    <button class="op">÷</button>
+    <button class="nombre">7</button>
+    <button class="nombre">8</button>
+    <button class="nombre">9</button>
+    <button class="op">×</button>
+    <button class="nombre">4</button>
+    <button class="nombre">5</button>
+    <button class="nombre">6</button>
+    <button class="op">-</button>
+    <button class="nombre">1</button>
+    <button class="nombre">2</button>
+    <button class="nombre">3</button>
+    <button class="op">+</button>
+    <button class="nombre">±</button>
+    <button class="nombre">0</button>
+    <button class="nombre">.</button>
+    <button class="op">=</button>
   </div>
 </div>
+`;
+
+// ajout une balise style dans le head
+let head = document.getElementsByTagName("head")[0];
+let style = document.createElement("style");
+head.appendChild(style);
+style.innerHTML = `
+body {
+  margin: 10;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+#calculette {
+  width: 350px;
+  background-color: #5e4b86;
+  border: #412c50 solid 5px;
+}
+#ecran {
+  display: flex;
+  flex-direction: column;
+  margin: 18px;
+  background-color: #456966;
+  border: #412c50 solid 5px;
+}
+#calcule {
+  height: 40px;
+  font-size: 20px;
+  align-content: center;
+  overflow: auto;
+}
+#reponse {
+  height: 50px;
+  font-size: 40px;
+  align-content: center;
+  text-align: right;
+}
+#bouton {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+#bouton button {
+  width: 75px;
+  height: 75px;
+  color: white;
+  border-radius: 10px;
+  font-size: 25px;
+  border-width: 3px;
+}
+.supprimer {
+  background-color: #412c50;
+}
+.nombre {
+    background-color: #382c50;
+}
+.op {
+    background-color: #f2d357;
+}
 `;
 
 // récupère les span
@@ -55,7 +116,7 @@ document.body.addEventListener("keydown", (e) => {
     let rep = calculateur2000(calcule);
     if (typeof rep !== "undefined") {
       spanReponse.textContent = rep;
-      spanCalcule.innerHTML = "";
     }
   }
 });
+
