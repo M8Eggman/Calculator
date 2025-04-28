@@ -36,9 +36,9 @@ export function calculateur2000(str) {
         i--;
       }
     }
-    listeCalcule.filter((vide) => vide != "");
+    listeCalcule = listeCalcule.filter((vide) => vide != "");
   }
-  console.log(listeCalcule);
+  
   // vérifie que tout est bon avant de faire le calcul
   for (let i = 0; i < listeCalcule.length; i++) {
     // si il y'a qu'un seul nombre le retourne
