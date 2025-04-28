@@ -24,6 +24,7 @@ export function calculateur2000(str) {
       i--;
     }
   }
+
   // remplace les moins de la liste par des plus et change le signe du chiffre d'après
   for (let i = 0; i < listeCalcule.length; i++) {
     if (listeCalcule[i] == "-") {
@@ -37,7 +38,6 @@ export function calculateur2000(str) {
     }
     listeCalcule.filter((vide) => vide != "");
   }
-  console.log(listeCalcule);
 
   // vérifie que tout est bon avant de faire le calcul
   for (let i = 0; i < listeCalcule.length; i++) {
@@ -62,6 +62,7 @@ export function calculateur2000(str) {
       }
     }
   }
+
   // fais toutes les multiplication et division
   for (let i = 0; i < listeCalcule.length; i++) {
     if (listeCalcule[i] == "×") {
@@ -94,6 +95,7 @@ export function calculateur2000(str) {
       }
     }
   }
+  
   // fais toutes les addition
   for (let i = 0; i < listeCalcule.length; i++) {
     if (listeCalcule[i] == "+") {
@@ -102,5 +104,11 @@ export function calculateur2000(str) {
       i--;
     }
   }
-  return rep;
+
+  // retourne undefinined si on divise par 0
+  if (!isFinite(rep)) {
+    return "undefined";
+  } else {
+    return rep;
+  }
 }
