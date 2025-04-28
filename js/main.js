@@ -41,16 +41,9 @@ let spanReponse = document.getElementById("reponse");
 document.body.addEventListener("keydown", (e) => {
   let calcule = spanCalcule.textContent;
   // vérifie si c'est bien un input pris en charge par le programme
-  // regarde si c'est un chiffre ou un point
-  if (!isNaN(e.key) || e.key == ".") {
-    // ajoute la touche pressé à la fin du string
+  // regarde si c'est un chiffre ou un point ou un moins
+  if (!isNaN(e.key) || e.key == "." || e.key == "+" || e.key == "-" || e.key == "*" || e.key == "/") {
     spanCalcule.textContent += e.key;
-    // regarde si c'est un opérateur valide
-  } else if (e.key == "+" || e.key == "-" || e.key == "*" || e.key == "/") {
-    // vérifie si le string ne contient pas déjà un opérateur
-    if (!(calcule.split("").includes("+") || calcule.split("").includes("-") || calcule.split("").includes("/") || calcule.split("").includes("*"))) {
-      spanCalcule.textContent += e.key;
-    }
     // regarde si c'est un backspace (retour en arrière)
   } else if (e.key == "Backspace") {
     // enlève la dernière lettre du string si le string a une longueur non nul
@@ -59,8 +52,9 @@ document.body.addEventListener("keydown", (e) => {
     }
     // regarde si c'est un enter
   } else if (e.key == "Enter") {
-    if (!calculateur2000(calcule) == "") {
-      spanReponse.textContent = calculateur2000(calcule);
+    let rep = calculateur2000(calcule);
+    if (typeof rep !== "undefined") {
+      spanReponse.textContent = rep;
       spanCalcule.innerHTML = "";
     }
   }
