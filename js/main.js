@@ -63,10 +63,11 @@ body {
   overflow: auto;
 }
 #reponse {
-  height: 50px;
-  font-size: 40px;
+  height: 45px;
+  font-size: 25px;
   align-content: center;
   text-align: right;
+  overflow: auto;
 }
 #bouton {
   display: flex;
@@ -97,26 +98,68 @@ body {
 // récupère les span
 let spanCalcule = document.getElementById("calcule");
 let spanReponse = document.getElementById("reponse");
+spanReponse.textContent = "0";
 
 // écoute les évenement de touches pressé
-document.body.addEventListener("keydown", (e) => {
-  let calcule = spanCalcule.textContent;
-  // vérifie si c'est bien un input pris en charge par le programme
-  // regarde si c'est un chiffre ou un point ou un moins
-  if (!isNaN(e.key) || e.key == "." || e.key == "+" || e.key == "-" || e.key == "*" || e.key == "/") {
-    spanCalcule.textContent += e.key;
-    // regarde si c'est un backspace (retour en arrière)
-  } else if (e.key == "Backspace") {
-    // enlève la dernière lettre du string si le string a une longueur non nul
-    if (calcule.length > 0) {
+document.body.addEventListener("keydown", (e) => {});
+
+let bouton = document.getElementById("bouton");
+bouton.addEventListener("click", (e) => {
+  switch (e.target.textContent) {
+    case "0":
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+    case "7":
+    case "8":
+    case "9":
+    case "0":
+    case ".":
+    case "+":
+    case "-":
+    case "×":
+    case "÷":
+      spanCalcule.textContent += e.target.textContent;
+      break;
+    case "C":
+      spanCalcule.textContent = "";
+      break;
+    case "CE":
+      // transforme le calcule dans le span en array split à chaque opérateur et point et enlève les élément vide
+      let listeCalcule1 = spanCalcule.textContent.split(/([.+\-×÷])/).filter((vide) => vide !== "");
+      // enlève le dernier de la liste et le remet en string
+      spanCalcule.textContent = listeCalcule1.splice(0, listeCalcule1.length - 1).join("");
+      break;
+    case "":
       spanCalcule.textContent = spanCalcule.textContent.slice(0, -1);
-    }
-    // regarde si c'est un enter
-  } else if (e.key == "Enter") {
-    let rep = calculateur2000(calcule);
-    if (typeof rep !== "undefined") {
-      spanReponse.textContent = rep;
-    }
+      break;
+    case "±":
+      let listeCalcule2 = spanCalcule.textContent.split(/([.+\-×÷])/).filter((vide) => vide !== "");
+      // parcours tout les élément du tableau et au premier nombre le change de signe
+      for (let i = listeCalcule2.length - 1; i >= 0; i--) {
+        // vérifie que l'élément du tableau est bien un nombre est que l'élement précedent est un -
+        if (!isNaN(parseFloat(listeCalcule2[i])) && listeCalcule2[i - 1] == "-") {
+          listeCalcule2.splice(i - 1, 1, "+");
+          break;
+          // vérifie que l'élément du tableau est bien un nombre
+        } else if (!isNaN(parseFloat(listeCalcule2[i]))) {
+          // si le nombre précedent du tableau est un moins le change en plus sinon multiplie le nombre par -1
+          if (listeCalcule2[i - 1] == "+") {
+            listeCalcule2.splice(i - 1, 1, "-");
+            break;
+          } else {
+            listeCalcule2[i] *= -1;
+            break;
+          }
+        }
+      }
+      spanCalcule.textContent = listeCalcule2.join("");
+      break;
+    case "=":
+      spanReponse.textContent = calculateur2000(spanCalcule.textContent);
+      break;
   }
 });
-

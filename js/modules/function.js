@@ -1,59 +1,100 @@
 export function calculateur2000(str) {
+  // sépare a chaque opérateur en les gardant dans la liste et enlève tout ce qui est vide de la liste
+  let listeCalcule = str.split(/([.+\-×÷])/).filter((vide) => vide != "");
   let rep = 0;
-  // selon l'opérateur va calculer le résultat
-  if (str.split("").includes("+")) {
-    // vérifie si il y'a plus de deux nombre dans le string
-    if (compteurDeNombre(str.split("+")) > 2) {
-      rep = NaN;
-    } else {
-        // fait le calcule si il y'a moin de deux nombre
-      rep = parseFloat(str.split("+")[0]) + parseFloat(str.split("+")[1]);
+
+  for (let i = 0; i < listeCalcule.length; i++) {
+    // enlève le plus si il n'est préceder d'aucun nombre
+    if (listeCalcule[i] == "+" && isNaN(parseFloat(listeCalcule[i - 1]))) {
+      listeCalcule.splice(i, 1);
+      i--;
     }
-  } else if (str.split("").includes("*")) {
-    if (compteurDeNombre(str.split("*")) > 2) {
-      rep = NaN;
-    } else {
-      rep = parseFloat(str.split("*")[0]) * parseFloat(str.split("*")[1]);
+    // fusionne les + - ensemble quand ils sont collé
+    if (listeCalcule[i] == "+" && listeCalcule[i + 1] == "+") {
+      listeCalcule.splice(i, 2, "+");
+      i--;
+    } else if (listeCalcule[i] == "-" && listeCalcule[i + 1] == "-") {
+      listeCalcule.splice(i, 2, "+");
+      i--;
+    } else if (listeCalcule[i] == "+" && listeCalcule[i + 1] == "-") {
+      listeCalcule.splice(i, 2, "-");
+      i--;
+    } else if (listeCalcule[i] == "-" && listeCalcule[i + 1] == "+") {
+      listeCalcule.splice(i, 2, "-");
+      i--;
     }
-  } else if (str.split("").includes("/")) {
-    if (compteurDeNombre(str.split("/")) > 2) {
-      rep = NaN;
-    } else {
-      rep = parseFloat(str.split("/")[0]) / parseFloat(str.split("/")[1]);
+  }
+  // remplace les moins de la liste par des plus et change le signe du chiffre d'après
+  for (let i = 0; i < listeCalcule.length; i++) {
+    if (listeCalcule[i] == "-") {
+      listeCalcule.splice(i, 2, "+", listeCalcule[i + 1] * -1);
+      i--;
     }
-  } else if (str.split("").includes("-")) {
-    if (compteurDeNombre(str.split("-")) > 2) {
-      rep = NaN;
-    } else {
-      if (str.split("-").length == 2) {
-        rep = parseFloat(str.split("-")[0]) - parseFloat(str.split("-")[1]);
-      } else if (str.split("-").length == 3) {
-        rep = parseFloat(-str.split("-")[1]) - parseFloat(str.split("-")[2]);
-      } else {
-        rep = parseFloat(-str.split("-")[1]) + parseFloat(str.split("-")[3]);
+    listeCalcule.filter((vide) => vide != "");
+  }
+
+  // vérifie que tout est bon avant de faire le calcul
+  for (let i = 0; i < listeCalcule.length; i++) {
+    // si il y'a qu'un seul nombre le retourne
+    if (listeCalcule.length == 1 && !isNaN(parseInt(listeCalcule[0]))) {
+      return listeCalcule[0];
+    }
+    // vérifie qu'après un operateur '*' '/' il n'y est pas un autre opérateur '*' '/'
+    if ((listeCalcule[i] == "×" && listeCalcule[i + 1] == "×") || (listeCalcule[i] == "×" && listeCalcule[i + 1] == "÷") || (listeCalcule[i] == "÷" && listeCalcule[i + 1] == "×") || (listeCalcule[i] == "÷" && listeCalcule[i + 1] == "÷")) {
+      return "SyntaxError";
+    }
+    // vérifie qu'après un opérateur il y a un nombre
+    if (isNaN(parseFloat(listeCalcule[i]))) {
+      if (isNaN(parseFloat(listeCalcule[i + 1])) && isNaN(parseFloat(listeCalcule[i + 2]))) {
+        return "SyntaxError";
       }
     }
-  } else {
-    rep = parseFloat(str);
-  }
-
-  // selon le résultat va renvoyer une réponse adéquate
-  if (isNaN(rep)) {
-    alert("Vous n'avez pas tapé un calcule valide");
-  } else if (!isFinite(rep)) {
-    return "undefined";
-  } else {
-    return rep;
-  }
-}
-
-// compte le nombre de nombre qu'il ya dans une liste
-function compteurDeNombre(liste) {
-  let compteur = 0;
-  liste.forEach((element) => {
-    if (!isNaN(parseFloat(element))) {
-      compteur++;
+    // vérifie qu'avant un opérateur il y a un nombre
+    if (isNaN(parseFloat(listeCalcule[i]))) {
+      if (isNaN(parseFloat(listeCalcule[i - 1]))) {
+        return "SyntaxError";
+      }
     }
-  });
-  return compteur;
+  }
+  // fais toutes les multiplication et division
+  for (let i = 0; i < listeCalcule.length; i++) {
+    if (listeCalcule[i] == "×") {
+      if (listeCalcule[i + 1] == "+" || listeCalcule[i + 1] == "-") {
+        if (listeCalcule[i + 1] == "+") {
+          rep = listeCalcule[i - 1] * listeCalcule[i + 2];
+        } else {
+          rep = -listeCalcule[i - 1] * listeCalcule[i + 2];
+        }
+        listeCalcule.splice(i - 1, 3, rep);
+        i--;
+      } else {
+        rep = listeCalcule[i - 1] * listeCalcule[i + 1];
+        listeCalcule.splice(i - 1, 3, rep);
+        i--;
+      }
+    } else if (listeCalcule[i] == "÷") {
+      if (listeCalcule[i + 1] == "+" || listeCalcule[i + 1] == "-") {
+        if (listeCalcule[i + 1] == "+") {
+          rep = listeCalcule[i - 1] / listeCalcule[i + 2];
+        } else {
+          rep = -listeCalcule[i - 1] / listeCalcule[i + 2];
+        }
+        listeCalcule.splice(i - 1, 3, rep);
+        i--;
+      } else {
+        rep = listeCalcule[i - 1] / listeCalcule[i + 1];
+        listeCalcule.splice(i - 1, 3, rep);
+        i--;
+      }
+    }
+  }
+  // fais toutes les addition
+  for (let i = 0; i < listeCalcule.length; i++) {
+    if (listeCalcule[i] == "+") {
+      rep = parseFloat(listeCalcule[i - 1]) + parseFloat(listeCalcule[i + 1]);
+      listeCalcule.splice(i - 1, 3, rep);
+      i--;
+    }
+  }
+  return rep;
 }
