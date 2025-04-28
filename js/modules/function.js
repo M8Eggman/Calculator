@@ -25,7 +25,7 @@ export function calculateur2000(str) {
     }
   }
 
-  // remplace les moins de la liste par des plus et change le signe du chiffre d'après
+  // remplace les moins de la liste par des plus si ya un nombre juste avant et change le signe du chiffre d'après
   for (let i = 0; i < listeCalcule.length; i++) {
     if (listeCalcule[i] == "-") {
       if (!isNaN(parseFloat(listeCalcule[i - 1]))) {
@@ -38,11 +38,11 @@ export function calculateur2000(str) {
     }
     listeCalcule = listeCalcule.filter((vide) => vide != "");
   }
-  
+
   // vérifie que tout est bon avant de faire le calcul
   for (let i = 0; i < listeCalcule.length; i++) {
     // si il y'a qu'un seul nombre le retourne
-    if (listeCalcule.length == 1 && !isNaN(parseInt(listeCalcule[0]))) {
+    if (listeCalcule.length == 1 && !isNaN(parseFloat(listeCalcule[0]))) {
       return listeCalcule[0];
     }
     // vérifie qu'après un operateur '*' '/' il n'y est pas un autre opérateur '*' '/'
