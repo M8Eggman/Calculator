@@ -27,11 +27,17 @@ export function calculateur2000(str) {
   // remplace les moins de la liste par des plus et change le signe du chiffre d'après
   for (let i = 0; i < listeCalcule.length; i++) {
     if (listeCalcule[i] == "-") {
-      listeCalcule.splice(i, 2, "+", listeCalcule[i + 1] * -1);
-      i--;
+      if (!isNaN(parseFloat(listeCalcule[i - 1]))) {
+        listeCalcule.splice(i, 2, "+", listeCalcule[i + 1] * -1);
+        i--;
+      } else {
+        listeCalcule.splice(i, 2, listeCalcule[i + 1] * -1);
+        i--;
+      }
     }
     listeCalcule.filter((vide) => vide != "");
   }
+  console.log(listeCalcule);
 
   // vérifie que tout est bon avant de faire le calcul
   for (let i = 0; i < listeCalcule.length; i++) {
