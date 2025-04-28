@@ -101,7 +101,38 @@ let spanReponse = document.getElementById("reponse");
 spanReponse.textContent = "0";
 
 // écoute les évenement de touches pressé
-document.body.addEventListener("keydown", (e) => {});
+document.body.addEventListener("keydown", (e) => {
+  switch (e.key) {
+    case "0":
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+    case "7":
+    case "8":
+    case "9":
+    case "0":
+    case ".":
+    case "+":
+    case "-":
+      spanCalcule.textContent += e.key;
+      break;
+    case "*":
+      spanCalcule.textContent += "×";
+      break;
+    case "/":
+      spanCalcule.textContent += "÷";
+      break;
+    case "Backspace":
+      spanCalcule.textContent = spanCalcule.textContent.slice(0, -1);
+      break;
+    case "Enter":
+      spanReponse.textContent = calculateur2000(spanCalcule.textContent);
+      break;
+  }
+});
 
 let bouton = document.getElementById("bouton");
 bouton.addEventListener("click", (e) => {
