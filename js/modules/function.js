@@ -1,6 +1,6 @@
 export function calculateur2000(str) {
   // sépare a chaque opérateur en les gardant dans la liste et enlève tout ce qui est vide de la liste
-  let listeCalcule = str.split(/([.+\-×÷])/).filter((vide) => vide != "");
+  let listeCalcule = str.split(/([+\-×÷])/).filter((vide) => vide != "");
   let rep = 0;
 
   for (let i = 0; i < listeCalcule.length; i++) {
@@ -38,7 +38,7 @@ export function calculateur2000(str) {
     }
     listeCalcule.filter((vide) => vide != "");
   }
-
+  console.log(listeCalcule);
   // vérifie que tout est bon avant de faire le calcul
   for (let i = 0; i < listeCalcule.length; i++) {
     // si il y'a qu'un seul nombre le retourne
@@ -95,7 +95,7 @@ export function calculateur2000(str) {
       }
     }
   }
-  
+
   // fais toutes les addition
   for (let i = 0; i < listeCalcule.length; i++) {
     if (listeCalcule[i] == "+") {
